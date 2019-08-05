@@ -1,4 +1,4 @@
-# Docker Compose for Nginx static cache
+# Docker Compose for Nginx cache
 
 ## Run build image
 
