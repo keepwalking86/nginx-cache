@@ -20,19 +20,19 @@ Có một số điểm cần biết:
 
 - Cache kiểm tra xem nội dung đã tồn tại chưa?
 
-	+ Nếu kiểm tra phản hồi chưa có bản lưu nội dung được cache, kết quả là thông tin MISS cache, khi đó nội dung sẽ được lấy từ application server.
+	+ Nếu kiểm tra phản hồi chưa có bản lưu nội dung được cache, kết quả là thông tin **MISS** cache, khi đó nội dung sẽ được lấy từ application server.
 
-	+ Nếu kiểm tra mà nội dung đã được cache, khi đó kết quả thông tin HIT cache, khi đó nội dung sẽ trả trực tiếp đến client mà không cần contact với application server
+	+ Nếu kiểm tra mà nội dung đã được cache, khi đó kết quả thông tin **HIT** cache, khi đó nội dung sẽ trả trực tiếp đến client mà không cần contact với application server
 
 - Một lần nội dung được cache, nó sẽ tiếp tục được phục vụ từ cache cho đến khi cache expire, hoặc khi cache bị clear/purge
 
 ## 3. Một số tùy chọn và tham số cấu hình
 
-- proxy_cache_path: Thiết lập vị trí lưu các cache file. Chúng ta thiết lập lưu trong đường dẫn /store/cache/ibolero.vn/
+- proxy_cache_path: Thiết lập vị trí lưu các cache file. Chúng ta thiết lập lưu trong đường dẫn /store/cache/example.com/
 
 **levels**: Chị thì này dùng để thiết lập cách các cache file được lưu đến hệ thống tệp tin (hay là cấp độ tạo thư mục cho lưu cache file). Nếu không định nghĩa, cache file được lưu trực tiếp vào vị trí được định nghĩa. Nếu một số lượng lớn các tệp tin cache được lưu trực tiếp vào một thư mục, khi đó tốc độ truy cập đến tệp tin sẽ chậm đi. Vì vậy, chúng ta định nghĩa levels, ví dụ như trong cấu hình levels=1:2 nghĩa là thư mục được phân thành 2 cấp, khi đó cache file được lưu vào thư mục con của vị trí lưu cache, dựa trên mã md5 hashes.
 
-**keys_zone**: dùng thiết lập shared memory zone cho lưu trữ cache keys và metadata.  Một bản sao các keys trong memory sẽ làm cho Nginx nhanh hơn để xác định request nào là HIT hay MISS mà không phải truy cập xuống disk, mục đích tăng tốc độ check. Ở đây, chúng ta định nghĩa keys_zone với tên ibolero.vn. Với 1MB zone, có thể lưu trữ dữ liệu cho khoảng 8000 keys, vì thế mà chúng ta cấu hình 400MB, có thể lưu trữ đến 800000 keys.
+**keys_zone**: dùng thiết lập shared memory zone cho lưu trữ cache keys và metadata.  Một bản sao các keys trong memory sẽ làm cho Nginx nhanh hơn để xác định request nào là HIT hay MISS mà không phải truy cập xuống disk, mục đích tăng tốc độ check. Ở đây, chúng ta định nghĩa keys_zone với tên example.com. Với 1MB zone, có thể lưu trữ dữ liệu cho khoảng 8000 keys, vì thế mà chúng ta cấu hình 400MB, có thể lưu trữ đến 800000 keys.
 
 **Inactive**: Chỉ thị này được dùng để bảo nginx clear cache một số asset mà không được truy cập trong khoảng time được thiết lập mà không quan tâm đến là cache đó đã expire hay chưa. Inactive content khác với expire content. Nginx không tự động xóa nội dung mà đã expire được định nghĩa bởi một cache control header. Ở đây, chúng ta thiết lập inactive=10d (10 ngày). Mặc định inactive được thiết lập là 10 phút.
 
