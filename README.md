@@ -8,7 +8,7 @@ Có nhiều phương thức cache giữa client (web browser) và application se
  
 Có một số điểm cần biết:
 
-- Nếu Nginx phục vụ trực tiếp static file thì cache sẽ được lưu ở client (browser), ngoài ra nó cũng ảnh hưởng đến mặt hiệu suất xử lý của Nginx khi số lượng request tăng cao (cụ thể về CPU và RAM)
+- Nginx phục vụ trực tiếp static file  cực kỳ nhanh, tuy nhiên nó cũng ảnh hưởng đến mặt hiệu suất xử lý của Nginx khi số lượng request tăng cao (cụ thể về CPU và RAM)
 
 - Nếu sử dụng nginx như static cache thì chỉ tốn về mặt lưu trữ dữ liệu cache (liên quan phần storage), và sử dụng rất ít hiệu suất của server (cụ thể về CPU và RAM), do application server không cần phải xử lý page khi client request, mà nginx cache server sẽ phản hồi trực tiếp nội dung đã lưu cache.
 
@@ -25,6 +25,10 @@ Có một số điểm cần biết:
 	+ Nếu kiểm tra mà nội dung đã được cache, khi đó kết quả thông tin **HIT** cache, khi đó nội dung sẽ trả trực tiếp đến client mà không cần contact với application server
 
 - Một lần nội dung được cache, nó sẽ tiếp tục được phục vụ từ cache cho đến khi cache expire, hoặc khi cache bị clear/purge
+
+<p align="center">
+<img src="images/nginx-static-cache.png" />
+</p>
 
 ## 3. Một số tùy chọn và tham số cấu hình
 
@@ -101,3 +105,7 @@ server {
 ```
 
 Ở đây, chúng ta tách vị trí lưu cache ra 2 hard disk và lưu ở 2 key zone. Sử dụng khối cấu hình “split_clients” định nghĩa key zone chung với biến $my_cache cho 2 key zone và cho phép mỗi hard disk sẽ cache một nửa số lượng request (50%). MD5 hash dựa trên biến $request_uri để xác định cache nào được sử dụng cho mỗi request
+
+**Read more**
+
+[https://www.nginx.com/blog/nginx-caching-guide/](https://www.nginx.com/blog/nginx-caching-guide/)
